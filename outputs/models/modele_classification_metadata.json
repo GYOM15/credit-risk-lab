@@ -1,5 +1,5 @@
 {
-    "date_entrainement": "2026-02-15 10:31:03",
+    "date_entrainement": "2026-02-16 17:00:32",
     "modele_type": "LogisticRegression",
     "modele_nom": "modele_classification",
     "hyperparametres": {
@@ -50,7 +50,7 @@
         "seuil_production": 0.08431559579003796,
         "description": "Seuil optimis\u00e9 pour garantir recall minimum",
         "recall_cible": 0.75,
-        "date_optimisation": "2026-02-15"
+        "date_optimisation": "2026-02-16"
     },
     "regles_metier": {
         "salaire_minimum": 18000,

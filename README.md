@@ -32,17 +32,8 @@ Pipeline complet de Machine Learning pour l'analyse du risque client et la déci
 
 ## Technologies et Librairies
 
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
-![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge&logo=python&logoColor=white)
-![Seaborn](https://img.shields.io/badge/Seaborn-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![SciPy](https://img.shields.io/badge/SciPy-8CAAE6?style=for-the-badge&logo=scipy&logoColor=white)
-![XGBoost](https://img.shields.io/badge/XGBoost-FF6600?style=for-the-badge&logo=xgboost&logoColor=white)
-![SHAP](https://img.shields.io/badge/SHAP-FF4785?style=for-the-badge&logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
-![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)![Scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)![Matplotlib](https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge&logo=python&logoColor=white)![Seaborn](https://img.shields.io/badge/Seaborn-3776AB?style=for-the-badge&logo=python&logoColor=white)![SciPy](https://img.shields.io/badge/SciPy-8CAAE6?style=for-the-badge&logo=scipy&logoColor=white)![XGBoost](https://img.shields.io/badge/XGBoost-FF6600?style=for-the-badge&logo=xgboost&logoColor=white)
+![SHAP](https://img.shields.io/badge/SHAP-FF4785?style=for-the-badge&logo=python&logoColor=white)![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
 
 **Librairies principales :**
 - **scikit-learn** : Pipeline ML, transformers personnalisés, modèles
@@ -59,7 +50,7 @@ Pipeline complet de Machine Learning pour l'analyse du risque client et la déci
 
 L'application Streamlit offre une interface intuitive pour tester le système de décision :
 
-![Application Streamlit](./docs/streamlit_app.png)
+![Application Streamlit](./img/app.png)
 
 **Fonctionnalités :**
 - Simulateur de demande de crédit individuelle
@@ -145,6 +136,19 @@ L'utilisation de données synthétiques permet :
 - De simuler des problématiques industrielles réalistes
 - De travailler dans un cadre reproductible et pédagogique
 - De partager le projet sans contraintes de confidentialité
+
+---
+
+### Note sur l'Interprétation des Performances
+
+**Les performances affichées par les modèles doivent être interprétées avec précaution.** Les données étant synthétiques et générées avec des patterns réguliers, les métriques obtenues (AUC 0.85+, MAPE 7.3%) peuvent être optimistes par rapport à ce qui serait observé sur des données réelles.
+
+**L'objectif principal de ce projet n'est pas d'obtenir les meilleures performances absolues**, mais plutôt de démontrer :
+- La capacité à gérer des données imparfaites (déséquilibre sévère, taille limitée)
+- La maîtrise de différentes techniques pour améliorer un modèle face à ces contraintes
+- Une approche méthodologique complète face à des données de mauvaise qualité
+
+Le choix délibéré de ces données difficiles (11% de défauts sur 1000 lignes) illustre comment un Data Scientist peut naviguer et optimiser un modèle malgré des conditions sous-optimales, une situation fréquente en contexte réel.
 
 ---
 

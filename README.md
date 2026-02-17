@@ -166,7 +166,7 @@ Le choix délibéré de ces données difficiles (11% de défauts sur 1000 lignes
 
 **Résultats clés :**
 - Déséquilibre de classe : 11% de défauts de paiement
-- Corrélation forte entre Salaire et Épargne (0.87) nécessitant feature engineering
+- Corrélation forte entre Salaire et Épargne (0.90) nécessitant feature engineering
 - Distribution asymétrique des variables financières (Salaire, Montant)
 
 ---

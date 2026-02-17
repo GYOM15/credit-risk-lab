@@ -20,6 +20,7 @@ Pipeline complet de Machine Learning pour l'analyse du risque client et la déci
   - [5. Explicabilité - SHAP](#5-explicabilité---shap)
   - [6. Système Expert End-to-End](#6-système-expert-end-to-end)
   - [7. Tests Unitaires](#7-tests-unitaires)
+  - [8. Simulation de Monitoring](#8-simulation-de-monitoring)
 - [Installation](#installation)
 - [Utilisation](#utilisation)
 - [Structure des Données](#structure-des-données)
@@ -383,7 +384,7 @@ Intégration ML + Règles Métier pour la décision finale.
 
 Wrapper pour simplifier l'utilisation du système :
 ```python
-system = CreditDecisionSystem('./models/')
+system = CreditDecisionSystem('./outputs/models/')
 decision = system.predict(client_dataframe)
 ```
 
@@ -408,6 +409,80 @@ Tests complets des transformers pour garantir la qualité :
 - **Edge cases** : DataFrame vide, ligne unique, colonne all-NaN
 
 **Taux de réussite** : 100% des tests passent
+
+---
+
+### 8. Simulation de Monitoring
+
+Simulation d'un système de surveillance de la dégradation du modèle en conditions réelles, explorant la détection de drift sur données et prédictions.
+
+#### Contexte et Motivation
+
+Cette simulation est née d'une prise de conscience importante lors du développement : **le risque de propagation d'erreur en cascade entre les deux modèles**.
+
+Dans ce système, les deux modèles interviennent séquentiellement dans la chaîne de décision :
+
+```
+Client → Modèle Classification → [Solvable ?]
+                                        ↓ OUI
+                              Modèle Régression → [Montant estimé]
+                                        ↓
+                              Règles Métier → Décision finale
+```
+
+**Le problème identifié :** Une erreur du modèle de classification se propage et amplifie l'erreur finale. Si le classificateur prédit à tort qu'un client est solvable (faux négatif), le modèle de régression estime alors un montant pour un profil qui n'aurait jamais dû y accéder. Les règles métier en aval héritent de cette erreur initiale et peuvent l'aggraver en accordant un montant élevé à un client réellement défaillant.
+
+À l'inverse, si le classificateur refuse à tort un client solvable (faux positif), le modèle de régression n'est jamais consulté, et le client se voit refuser un crédit qu'il aurait pu honorer.
+
+**Cette propagation est d'autant plus critique que le modèle de classification est instable** (validation K-Fold avec forte variance), ce qui rend la surveillance continue particulièrement pertinente.
+
+#### Types de Drift Surveillés
+
+**Data Drift** — Changement dans les distributions des features
+- Test de Kolmogorov-Smirnov (KS) pour comparer les distributions baseline vs production
+- Seuil d'alerte : p-value < 0.05
+- Si les features driftent, les deux modèles sont affectés simultanément, ce qui amplifie le risque d'erreur en cascade
+
+**Prediction Drift** — Changement dans les prédictions du modèle
+- Comparaison des distributions de probabilités de défaut
+- Seuil d'alerte : changement de moyenne > 10%
+
+**Target Drift** — Changement dans la distribution de la target
+- Test du Chi² pour variables catégorielles
+- Indicateur que le concept sous-jacent a évolué
+
+#### Niveaux de Sévérité
+
+| Niveau | Condition | Action |
+|--------|-----------|--------|
+| LOW | p-value ≥ 0.05 | Surveillance normale |
+| MEDIUM | 0.01 ≤ p-value < 0.05 | Surveillance accrue |
+| HIGH | p-value < 0.01 | Réentraînement recommandé |
+
+#### Utilisation
+
+```python
+from src.monitoring.monitoring_simulation import run_monitoring_simulation
+
+report, monitor = run_monitoring_simulation(
+    X_train=X_train_transformed,
+    y_train=y_train_classif,
+    predictions_train=predictions_train,
+    X_test=X_test_transformed,
+    y_test=y_test_classif,
+    predictions_test=predictions_test,
+    drift_type='moderate',          # 'light', 'moderate', 'severe'
+    save_path='./outputs'
+)
+```
+
+#### Résultats de la Simulation
+
+La simulation avec `drift_type='moderate'` a produit les résultats suivants :
+
+- **Data drift détecté** sur `Ville_paris` (p=0.0000) et `Age` (p=0.0222)
+- **Prediction drift faible** malgré le data drift : le modèle montre une certaine robustesse sur les distributions de prédiction
+- **Conclusion** : Un drift sur des features aussi structurantes que la localisation géographique suffit à justifier un réentraînement, particulièrement dans un système en cascade où l'erreur de classification se répercute sur l'estimation du montant
 
 ---
 
@@ -574,6 +649,8 @@ Projet développé dans le cadre d'un pipeline complet de Data Science appliqué
 - Tests unitaires sur transformers personnalisés
 - Déploiement d'interface web (Streamlit)
 - Architecture modulaire et réutilisable
+- Simulation de monitoring avec détection de drift (KS test, Chi²)
+- Conscience et analyse de la propagation d'erreur en cascade dans un pipeline multi-modèles
 
 ---
 
